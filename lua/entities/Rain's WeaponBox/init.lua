@@ -2,7 +2,10 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 
- 
+util.AddNetworkString("ChangeColor") 
+
+
+
 local initialColor = nil //declare initial color
 function ENT:Initialize()
     self:SetModel("models/items/ammocrate_smg1.mdl")
@@ -27,23 +30,28 @@ weaponsTable = {
 }
 
 
-
 local canUse = true  
 function ENT:Use(caller,activator)
-    if canUse then
+    if canUse && IsValid(self) then
         self:SetColor(Color(218,26,26,10))   //interaction color
         canUse = false  //simple bool to limit rate at which player can use weapon box
+        net.Start("ChangeColor")
+        net.WriteColor(Color(255,255,255,255),true )
+        net.Broadcast()
         timer.Simple(1,function ()
-            weapon = ents.Create(weaponsTable[math.random(1,#weaponsTable)]) //set weapon class to random from weaponsTable
-            weapon:SetPos(self:LocalToWorld(Vector(0,0,30)))  //set weapon position 30 units up relative to weapon box
-            weapon:SetMoveType(MOVETYPE_NONE) // make weapon also static
-            weapon:SetParent(self)  // parent weapon to weapon box (so it will move with it)
-            weapon:SetAngles(self:LocalToWorldAngles(Angle(0,90,0)) )   // set rotation of weapon to match weaponbox and rotate it by 90 on yaw axis
-            weapon:Spawn() 
-            sound.Play( "buttons/combine_button5.wav", self:GetPos() ) 
-            self:SetColor(intialColor) //set weaponbox color to itself
+            if IsValid(self) then
+                weapon = ents.Create(weaponsTable[math.random(1,table.maxn(weaponsTable))]) //set weapon class to random from weaponsTable
+                weapon:SetPos(self:LocalToWorld(Vector(0,0,30)))  //set weapon position 30 units up relative to weapon box
+                weapon:SetMoveType(MOVETYPE_NONE) // make weapon also static
+                weapon:SetParent(self)  // parent weapon to weapon box (so it will move with it)
+                weapon:SetAngles(self:LocalToWorldAngles(Angle(0,90,0)) )   // set rotation of weapon to match weaponbox and rotate it by 90 on yaw axis
+                weapon:Spawn() 
+                sound.Play( "buttons/combine_button5.wav", self:GetPos() ) 
+                self:SetColor(intialColor) //set weaponbox color to itself
+            end
             canUse = true
         end)
+
     end
    
 end
