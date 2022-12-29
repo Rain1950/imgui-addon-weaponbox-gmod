@@ -13,6 +13,7 @@ end
 
 
 function TOOL:LeftClick( trace )
+	
 	if ( trace.HitSky or !trace.HitPos or trace.HitNormal.z < 0.7 ) then return false end
 	if ( IsValid( trace.Entity ) and ( trace.Entity:GetClass() == "item_ammo_crate" or trace.Entity:IsPlayer() or trace.Entity:IsNPC() ) ) then return false end
 	if ( CLIENT ) then return true end
@@ -24,8 +25,7 @@ function TOOL:LeftClick( trace )
 
 	weaponbox =  ents.Create("rain's weaponbox")
 	weaponbox:SetPos(trace.HitPos)
-    weaponbox:SetParent(weaponbox)
-	weaponbox:SetLocalPos(Vector(0,0,10))
+	weaponbox:SetPos(weaponbox:LocalToWorld(Vector(0,0,15)))
 	weaponbox:SetAngles(ang)
 	weaponbox:Spawn()
 	
@@ -34,14 +34,15 @@ function TOOL:LeftClick( trace )
 		undo.AddEntity( weaponbox )
 		undo.SetPlayer( ply )
 	undo.Finish()
-	DoPropSpawnedEffect(weaponbox)
 
+	DoPropSpawnedEffect(weaponbox)
+    return true 
 	
 end
 
 
 
-list.Set( "AmmoCrateTy", "#Pistol_ammo", { item_ammo_crate_type = "0" } )
+list.Set( "AmmoCrateType", "#Pistol_ammo", { item_ammo_crate_type = "0" } )
 list.Set( "AmmoCrateType", "#Buckshot_ammo", { item_ammo_crate_type = "4" } )
 list.Set( "AmmoCrateType", "#SMG1_grenade_ammo", { item_ammo_crate_type = "9" } )
 list.Set( "AmmoCrateType", "#SMG1_ammo", { item_ammo_crate_type = "1" } )

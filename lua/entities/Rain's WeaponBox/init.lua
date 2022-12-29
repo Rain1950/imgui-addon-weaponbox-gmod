@@ -1,7 +1,7 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
+AddCSLuaFile("imgui.lua")
 include("shared.lua")
-
 util.AddNetworkString("ChangeColor") 
 util.AddNetworkString("isHovering") 
 
