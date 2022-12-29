@@ -3,7 +3,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 util.AddNetworkString("ChangeColor") 
-
+util.AddNetworkString("isHovering") 
 
 
 local initialColor = nil //declare initial color
@@ -29,10 +29,18 @@ weaponsTable = {
     "weapon_smg1",
 }
 
+local isHovering = false 
 
-local canUse = true  
+net.Receive("isHovering",function ()
+    isHovering = net.ReadBool()
+    print("floppa")
+end)
+
+
+local canUse = true
+ 
 function ENT:Use(caller,activator)
-    if canUse && IsValid(self) then
+    if canUse && IsValid(self) && !isHovering then
         self:SetColor(Color(218,26,26,10))   //interaction color
         canUse = false  //simple bool to limit rate at which player can use weapon box
         net.Start("ChangeColor")
