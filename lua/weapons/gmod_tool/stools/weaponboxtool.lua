@@ -42,31 +42,34 @@ end
 
 
 
-list.Set( "AmmoCrateType", "#Pistol_ammo", { item_ammo_crate_type = "0" } )
-list.Set( "AmmoCrateType", "#Buckshot_ammo", { item_ammo_crate_type = "4" } )
-list.Set( "AmmoCrateType", "#SMG1_grenade_ammo", { item_ammo_crate_type = "9" } )
-list.Set( "AmmoCrateType", "#SMG1_ammo", { item_ammo_crate_type = "1" } )
-list.Set( "AmmoCrateType", "#AR2_ammo", { item_ammo_crate_type = "2" } )
-list.Set( "AmmoCrateType", "#RPG_round_ammo", { item_ammo_crate_type = "3" } )
-list.Set( "AmmoCrateType", "#Buckshot_ammo", { item_ammo_crate_type = "4" } )
-list.Set( "AmmoCrateType", "#Grenade_ammo", { item_ammo_crate_type = "5" } )
-list.Set( "AmmoCrateType", "#357_ammo", { item_ammo_crate_type = "6" } )
-list.Set( "AmmoCrateType", "#XBowBolt_ammo", { item_ammo_crate_type = "7" } )
-list.Set( "AmmoCrateType", "#AR2AltFire_ammo", { item_ammo_crate_type = "8" } )
-list.Set( "AmmoCrateType", "#SMG1_grenade_ammo", { item_ammo_crate_type = "9" } )
-list.Set( "AmmoCrateType", "#tool.item_ammo_crate.random", { item_ammo_crate_type = "10" } )
-
 if ( SERVER ) then return end
 
 
 
 
 function TOOL.BuildCPanel( panel )
-	panel:AddControl( "combobox", { Label = "#tool.item_ammo_crate.type", Options = list.Get( "AmmoCrateType" ), Height = 204 } )
-    panel:Button("sex","sex")
+	-- panel:AddControl( "combobox", { Label = "#tool.item_ammo_crate.type", Options = list.Get( "AmmoCrateType" ), Height = 204 } )
+	dlist = vgui.Create("DListView",panel)
+	dlist:SetPos(0,0)
+	dlist:SetSize(400,500)
+	column1 = dlist:AddColumn( "Index" )
+	dlist:AddColumn( "Size" )
+ 
 
+    weaponsList = weapons.GetList()
+    for k, v in pairs(weaponsList) do
+		dlist:AddLine(k,v.ClassName)
+ 
+	end
+    column1:ResizeColumn(-200)
     
 
-
+	checkbox = vgui.Create("DCheckBoxLabel",panel)
+	checkbox:SetPos(15,380)
+	checkbox:SetText("Limited Supply")
+	checkbox:SetTextColor(Color(0,0,0))
+	checkbox:SetSize(300,300)
 end
+
+
 
