@@ -30,8 +30,13 @@ function ENT:Draw()
     if imgui.Entity3D2D(self,Vector(17,-11.5,12) , Angle(0,90,90),0.1) then
         surface.SetDrawColor(BackGroundColor) 
         draw.RoundedBox(15,-35,75,300,60,BackGroundColor)
+        if(selectedWeapons[1]:len() < 15) then
+            draw.DrawText(selectedWeapons[1],imgui.xFont("!Arial Rounded MT Bold@30"),110,85,nil,TEXT_ALIGN_CENTER)
+        else
+            draw.DrawText(selectedWeapons[1],imgui.xFont("!Arial Rounded MT Bold@24"),110,85,nil,TEXT_ALIGN_CENTER)
+        end
         
-        draw.SimpleText("Weapon class",imgui.xFont("!Arial Rounded MT Bold@30"),19,85)
+        -- draw.SimpleText(selectedWeapons[1],imgui.xFont("!Arial Rounded MT Bold@30"),19,85,nil,nil,1)
         if imgui.xButton(275,82,50,50,50,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //right button
             print("rat")
         end
