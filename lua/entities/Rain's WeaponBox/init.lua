@@ -2,8 +2,29 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 AddCSLuaFile("imgui.lua")
 include("shared.lua")
+
+
 util.AddNetworkString("ChangeColor") 
 util.AddNetworkString("isHovering") 
+util.AddNetworkString("selectedWeaponsTable") 
+
+
+
+
+function ENT:SetWeaponsTable(weaponTable)
+    self.weapons = weaponTable
+    PrintTable(self.weapons) 
+end
+
+function ENT:SetLimitedSupply(LimitedSupply)
+    self.LimitedSupply = LimitedSupply
+  
+end
+
+function ENT:SetLimitedSupplyAmount(amount)
+    self.LimitedSupplyAmount = amount
+
+end
 
 
 local initialColor = nil //declare initial color
@@ -13,34 +34,27 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_NONE)  // make crate static 
     self:DrawShadow(false )  //remove shadow from crate
     intialColor = self:GetColor()  //set initialColor to default color of the entity
+    
 end
 
 
-weaponsTable = {
-    "weapon_357",
-    "weapon_pistol",
-    "weapon_bugbait",
-    "weapon_crossbow",
-    "weapon_crowbar",        //table of weapons to choose from
-    "weapon_frag",
-    "weapon_ar2",
-    "weapon_rpg",
-    "weapon_shotgun",
-    "weapon_smg1",
-}
+
+
+    
+
 
 local isHovering = false 
 
 net.Receive("isHovering",function ()
     isHovering = net.ReadBool()
-    print("floppa")
 end)
 
 
 local canUse = true
  
 function ENT:Use(caller,activator)
-    if canUse && IsValid(self) && !isHovering then
+    if canUse && IsValid(self) && !isHovering  then
+
         self:SetColor(Color(218,26,26,10))   //interaction color
         canUse = false  //simple bool to limit rate at which player can use weapon box
         net.Start("ChangeColor")
@@ -48,7 +62,7 @@ function ENT:Use(caller,activator)
         net.Broadcast()
         timer.Simple(1,function ()
             if IsValid(self) then
-                weapon = ents.Create(weaponsTable[math.random(1,table.maxn(weaponsTable))]) //set weapon class to random from weaponsTable
+                weapon = ents.Create(self.weapons[math.random(1,#self.weapons)]) //set weapon class to random from weaponsTable
                 weapon:SetPos(self:LocalToWorld(Vector(0,0,30)))  //set weapon position 30 units up relative to weapon box
                 weapon:SetMoveType(MOVETYPE_NONE) // make weapon also static
                 weapon:SetParent(self)  // parent weapon to weapon box (so it will move with it)

@@ -43,7 +43,6 @@ function ENT:Draw()
                 net.Start("isHovering",true )
                 net.WriteBool(hovering)
                 net.SendToServer()  
-                print(hovering)
                 previousState = hovering
             end
         end
