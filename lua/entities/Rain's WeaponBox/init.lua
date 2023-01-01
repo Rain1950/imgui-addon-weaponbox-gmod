@@ -13,7 +13,6 @@ util.AddNetworkString("selectedWeaponsTable")
 
 function ENT:SetWeaponsTable(weaponTable)
     self.weapons = weaponTable
-    PrintTable(self.weapons) 
 end
 
 function ENT:SetLimitedSupply(LimitedSupply)

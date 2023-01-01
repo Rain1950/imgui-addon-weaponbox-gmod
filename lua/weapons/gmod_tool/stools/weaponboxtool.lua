@@ -53,18 +53,17 @@ function TOOL.BuildCPanel( panel )
     supplyAmount = vgui.Create("DTextEntry",panel)
 	supplyAmount:SetNumeric(true)
 	supplyAmount:SetPos(110,514)
-
-	LSCheckbox = vgui.Create("DLSCheckboxLabel",panel)  // LSCheckBox - Limited Supply CheckBox
+	LSCheckbox = vgui.Create("DCheckBoxLabel",panel)  // LSCheckbox - Limited Supply check Box
 	LSCheckbox:SetPos(10,500)
 	LSCheckbox:SetText("Limited Supply")
 	LSCheckbox:SetTextColor(Color(0,0,0))
 	LSCheckbox:SetSize(100,50)
 
-	RSCheckBox = vgui.Create("DLSCheckboxLabel",panel)  // RSCheckBox - Random  Supply CheckBox
-	RSCheckBox:SetPos(10,550)
-	RSCheckBox:SetText("Random selection mode")
-	RSCheckBox:SetTextColor(Color(0,0,0))
-	RSCheckBox:SetSize(100,50)
+	RSCheckbox = vgui.Create("DCheckBoxLabel",panel)  // RSCheckbox - Random Supply check Box
+	RSCheckbox:SetPos(10,530)
+	RSCheckbox:SetText("Random selection mode")
+	RSCheckbox:SetTextColor(Color(0,0,0))
+	RSCheckbox:SetSize(200,50)
 		
 
 	function dlist:OnRowSelected(rowIndex,row)
@@ -109,6 +108,36 @@ function TOOL.BuildCPanel( panel )
 	
 		end
 	end
+
+    
+
+
+
+
+
+
+
+
+
+
+  //RSCheckBoxs
+
+	if (!RSCheckbox:GetChecked()) then
+		RSCheckbox:SetTextColor(uncheckedColor)
+					
+	else
+		RSCheckbox:SetTextColor(checkedColor)
+	end
+	function RSCheckbox:OnChange(val)
+		if(!val) then
+			RSCheckbox:SetTextColor(uncheckedColor)	
+		else
+			RSCheckbox:SetTextColor(checkedColor)
+		end
+	end
+
+
+
 
 end
 
