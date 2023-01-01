@@ -54,13 +54,17 @@ function TOOL.BuildCPanel( panel )
 	supplyAmount:SetNumeric(true)
 	supplyAmount:SetPos(110,514)
 
-	checkbox = vgui.Create("DCheckBoxLabel",panel)
-	checkbox:SetPos(10,500)
-	checkbox:SetText("Limited Supply")
-	checkbox:SetTextColor(Color(0,0,0))
-	checkbox:SetSize(100,50)
+	LSCheckbox = vgui.Create("DLSCheckboxLabel",panel)  // LSCheckBox - Limited Supply CheckBox
+	LSCheckbox:SetPos(10,500)
+	LSCheckbox:SetText("Limited Supply")
+	LSCheckbox:SetTextColor(Color(0,0,0))
+	LSCheckbox:SetSize(100,50)
 
-
+	RSCheckBox = vgui.Create("DLSCheckboxLabel",panel)  // RSCheckBox - Random  Supply CheckBox
+	RSCheckBox:SetPos(10,550)
+	RSCheckBox:SetText("Random selection mode")
+	RSCheckBox:SetTextColor(Color(0,0,0))
+	RSCheckBox:SetSize(100,50)
 		
 
 	function dlist:OnRowSelected(rowIndex,row)
@@ -79,29 +83,29 @@ function TOOL.BuildCPanel( panel )
     end
 
 
-	if (!checkbox:GetChecked()) then
+	if (!LSCheckbox:GetChecked()) then
 
 		supplyAmount:SetEnabled(false)
 		supplyAmount:SetTextColor(uncheckedColor)
-		checkbox:SetTextColor(uncheckedColor)
+		LSCheckbox:SetTextColor(uncheckedColor)
 					
 	else
 		supplyAmount:SetEnabled(true )
 		supplyAmount:SetTextColor(checkedColor)
-		checkbox:SetTextColor(checkedColor)
+		LSCheckbox:SetTextColor(checkedColor)
 			
 	end
-	function checkbox:OnChange(val)
+	function LSCheckbox:OnChange(val)
 		if(!val) then
 			supplyAmount:SetEnabled(false)
 			supplyAmount:SetTextColor(uncheckedColor)
-			checkbox:SetTextColor(uncheckedColor)
+			LSCheckbox:SetTextColor(uncheckedColor)
 	
 			
 		else
 			supplyAmount:SetEnabled(true )
 			supplyAmount:SetTextColor(checkedColor)
-			checkbox:SetTextColor(checkedColor)
+			LSCheckbox:SetTextColor(checkedColor)
 	
 		end
 	end
