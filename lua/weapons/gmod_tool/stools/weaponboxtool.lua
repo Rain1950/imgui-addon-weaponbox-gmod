@@ -75,7 +75,7 @@ function TOOL.BuildCPanel( panel )
 				end
 			end
 		
-			net.Start("selectedWeaponsTable")
+			net.Start("selectedWeaponsTable",true )
 			net.WriteTable(selectedWeapons)
 			net.SendToServer()
 		end
@@ -114,12 +114,6 @@ function TOOL.BuildCPanel( panel )
 
 
 
-
-
-
-
-
-
   //RSCheckBoxs
 
 	if (!RSCheckbox:GetChecked()) then
@@ -145,6 +139,11 @@ end
 net.Receive("selectedWeaponsTable",function ()
 	selectedWeapons = net.ReadTable()
 end)
+
+
+
+
+
 
 function TOOL:LeftClick( trace )
 	if(#selectedWeapons < 1) then return false end

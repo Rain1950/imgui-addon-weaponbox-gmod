@@ -7,9 +7,13 @@ include("shared.lua")
 util.AddNetworkString("ChangeColor") 
 util.AddNetworkString("isHovering") 
 util.AddNetworkString("selectedWeaponsTable") 
+util.AddNetworkString("RandomSupplyBool")
+util.AddNetworkString("LimitedSupplyAmount")
+util.AddNetworkString("LimitedSupplyBool")
 
-
-
+function  ENT:SetRandomSupply(RandomSupply)
+    self.RandomSupply = RandomSupply
+end
 
 function ENT:SetWeaponsTable(weaponTable)
     self.weapons = weaponTable
@@ -24,6 +28,8 @@ function ENT:SetLimitedSupplyAmount(amount)
     self.LimitedSupplyAmount = amount
 
 end
+
+
 
 
 local initialColor = nil //declare initial color
