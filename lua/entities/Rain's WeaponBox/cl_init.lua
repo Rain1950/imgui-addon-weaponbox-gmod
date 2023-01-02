@@ -24,11 +24,24 @@ nextButton.pressColor = Color(20,20,20,255)
 local previousState = false   
 selectedIndex = 1
 
+
+local RightArrowMat = Material("arrow1.png")
+local LeftArrowMat = Material("arrow2.png")   // materials for navigation arrows
+
+
 local CanPress  = true
 function ENT:Draw()
     self:DrawModel()     
     
     if imgui.Entity3D2D(self,Vector(17,-11.5,12) , Angle(0,90,90),0.1) then
+        surface.SetDrawColor(255,255,255)
+        surface.SetMaterial(RightArrowMat)    //right arrow
+        surface.DrawTexturedRect(263,68,75,75)
+   
+
+        surface.SetMaterial(LeftArrowMat)    //right arrow
+        surface.DrawTexturedRect(-110,68,75,75)
+
         surface.SetDrawColor(BackGroundColor) 
         draw.RoundedBox(15,-35,75,300,60,BackGroundColor)
         if(selectedWeapons[selectedIndex]:len() < 15) then
@@ -73,6 +86,7 @@ function ENT:Draw()
       
         if imgui.xButton(-96,82,50,50,5,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //left button
             if CanPress then
+                
                 net.Start("SetNextSelection",true)
                 net.WriteBool(false)
                 net.SendToServer()

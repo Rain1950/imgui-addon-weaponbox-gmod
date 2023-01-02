@@ -3,6 +3,8 @@ AddCSLuaFile("shared.lua")
 AddCSLuaFile("imgui.lua")
 include("shared.lua")
 
+resource.AddFile("arrow(1).png")
+resource.AddFile("arrow(2).png")   //navigation arrows
 
 util.AddNetworkString("ChangeColor") 
 util.AddNetworkString("isHovering") 
