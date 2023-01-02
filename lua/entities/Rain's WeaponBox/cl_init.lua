@@ -54,11 +54,6 @@ function ENT:Draw()
             
         
       
-        
-
-
-
-    
         if imgui.xButton(-96,82,50,50,50,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //left button
             print("rat")
            

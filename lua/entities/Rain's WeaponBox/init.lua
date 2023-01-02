@@ -11,6 +11,7 @@ util.AddNetworkString("RandomSupplyBool")
 util.AddNetworkString("LimitedSupplyAmount")
 util.AddNetworkString("LimitedSupplyBool")
 
+
 function  ENT:SetRandomSupply(RandomSupply)
     self.RandomSupply = RandomSupply
 end
@@ -29,6 +30,9 @@ function ENT:SetLimitedSupplyAmount(amount)
 
 end
 
+function ENT:SetCurrentlySelected(index)
+    self.CurrentlySelected = index
+end
 
 
 
@@ -39,6 +43,7 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_NONE)  // make crate static 
     self:DrawShadow(false )  //remove shadow from crate
     intialColor = self:GetColor()  //set initialColor to default color of the entity
+    self.CurrentlySelected = 1
     
 end
 
@@ -66,8 +71,12 @@ function ENT:Use(caller,activator)
         net.WriteColor(Color(255,255,255,255),true )
         net.Broadcast()
         timer.Simple(1,function ()
-            if IsValid(self) then
-                weapon = ents.Create(self.weapons[math.random(1,#self.weapons)]) //set weapon class to random from weaponsTable
+            if IsValid(self)  then
+                if self.RandomSupply  then
+                    weapon = ents.Create(self.weapons[math.random(1,#self.weapons)]) //set weapon class to random from weaponsTable
+                else
+                    weapon = ents.Create(self.weapons[weaponbox.CurrentlySelected]) //set weapon class to random from weaponsTable
+                end
                 weapon:SetPos(self:LocalToWorld(Vector(0,0,30)))  //set weapon position 30 units up relative to weapon box
                 weapon:SetMoveType(MOVETYPE_NONE) // make weapon also static
                 weapon:SetParent(self)  // parent weapon to weapon box (so it will move with it)

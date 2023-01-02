@@ -81,6 +81,20 @@ function TOOL.BuildCPanel( panel )
 		end
     end
 
+    function supplyAmount:OnChange (val)
+		if(IsValid(supplyAmount)) then
+			net.Start("LimitedSupplyAmount",true )
+			net.WriteInt(val)
+			net.SendToServer()
+		end
+	end
+
+
+
+	
+    
+
+
 
 	if (!LSCheckbox:GetChecked()) then
 
@@ -95,6 +109,10 @@ function TOOL.BuildCPanel( panel )
 			
 	end
 	function LSCheckbox:OnChange(val)
+		net.Start("LimitedSupplyBool",true )
+		net.WriteBool(val)
+		net.SendToServer()
+		
 		if(!val) then
 			supplyAmount:SetEnabled(false)
 			supplyAmount:SetTextColor(uncheckedColor)
@@ -123,6 +141,10 @@ function TOOL.BuildCPanel( panel )
 		RSCheckbox:SetTextColor(checkedColor)
 	end
 	function RSCheckbox:OnChange(val)
+        net.Start("RandomSupplyBool",true)
+		net.WriteBool(val)
+		net.SendToServer()
+		print("RSCheckbox sent",val)
 		if(!val) then
 			RSCheckbox:SetTextColor(uncheckedColor)	
 		else
@@ -140,9 +162,17 @@ net.Receive("selectedWeaponsTable",function ()
 	selectedWeapons = net.ReadTable()
 end)
 
+net.Receive("LimitedSupplyAmount",function ()
+	LimitedSupplyAmount = net.ReadInt()
+end)
 
+net.Receive("LimitedSupplyBool",function ()
+	LimitedSupplyBool = net.ReadBool()
+end)
 
-
+net.Receive("RandomSupplyBool",function ()
+	RandomSupplyBool = net.ReadBool()
+end)
 
 
 function TOOL:LeftClick( trace )
@@ -161,7 +191,9 @@ function TOOL:LeftClick( trace )
 	weaponbox:SetPos(weaponbox:LocalToWorld(Vector(0,0,15)))
 	weaponbox:SetAngles(ang)
 	weaponbox:SetWeaponsTable(selectedWeapons)
-	
+	weaponbox:SetLimitedSupply(LimitedSupplyBool)
+	weaponbox:SetLimitedSupplyAmount(LimitedSupplyAmount)
+	weaponbox:SetRandomSupply(RandomSupplyBool)
 	weaponbox:Spawn()
 	
 
