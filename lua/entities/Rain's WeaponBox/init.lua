@@ -10,6 +10,9 @@ util.AddNetworkString("selectedWeaponsTable")
 util.AddNetworkString("RandomSupplyBool")
 util.AddNetworkString("LimitedSupplyAmount")
 util.AddNetworkString("LimitedSupplyBool")
+util.AddNetworkString("SetNextSelection")
+
+
 
 
 function  ENT:SetRandomSupply(RandomSupply)
@@ -30,9 +33,25 @@ function ENT:SetLimitedSupplyAmount(amount)
 
 end
 
-function ENT:SetCurrentlySelected(index)
-    self.CurrentlySelected = index
+
+
+function ENT:SetNextSelection(right)
+    if right then
+        if(self.CurrentlySelected == #self.weapons) then       //if selected weapon is last weapon, next in the right should be first from weapons table
+            self.CurrentlySelected = 1
+        else                                                    
+            self.CurrentlySelected= self.CurrentlySelected+1      
+        end
+    else
+        if(self.CurrentlySelected == 1) then
+            self.CurrentlySelected = #self.weapons
+        else
+            self.CurrentlySelected=self.CurrentlySelected-1
+        end
+    end
 end
+
+    
 
 
 
@@ -60,11 +79,14 @@ net.Receive("isHovering",function ()
 end)
 
 
+
 local canUse = true
  
 function ENT:Use(caller,activator)
     if canUse && IsValid(self) && !isHovering  then
 
+       
+     
         self:SetColor(Color(218,26,26,10))   //interaction color
         canUse = false  //simple bool to limit rate at which player can use weapon box
         net.Start("ChangeColor")
@@ -90,5 +112,13 @@ function ENT:Use(caller,activator)
 
     end
    
+end
+
+function ENT:Think()
+    net.Receive("SetNextSelection",function ()
+        nextSelection = net.ReadBool()
+        print(nextSelection)
+        self:SetNextSelection(nextSelection)
+    end)
 end
 

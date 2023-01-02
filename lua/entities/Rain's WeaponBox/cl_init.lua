@@ -20,25 +20,42 @@ nextButton.pressColor = Color(20,20,20,255)
 
 
 
- 
+ currentlySelected = 1
 local previousState = false   
-local test = true
+selectedIndex = 1
 
+local CanPress  = true
 function ENT:Draw()
     self:DrawModel()     
     
     if imgui.Entity3D2D(self,Vector(17,-11.5,12) , Angle(0,90,90),0.1) then
         surface.SetDrawColor(BackGroundColor) 
         draw.RoundedBox(15,-35,75,300,60,BackGroundColor)
-        if(selectedWeapons[1]:len() < 15) then
-            draw.DrawText(selectedWeapons[1],imgui.xFont("!Arial Rounded MT Bold@30"),110,85,nil,TEXT_ALIGN_CENTER)
+        if(selectedWeapons[selectedIndex]:len() < 15) then
+            draw.DrawText(selectedWeapons[selectedIndex],imgui.xFont("!Arial Rounded MT Bold@30"),110,85,nil,TEXT_ALIGN_CENTER)
         else
-            draw.DrawText(selectedWeapons[1],imgui.xFont("!Arial Rounded MT Bold@24"),110,85,nil,TEXT_ALIGN_CENTER)
+            draw.DrawText(selectedWeapons[selectedIndex],imgui.xFont("!Arial Rounded MT Bold@24"),110,85,nil,TEXT_ALIGN_CENTER)
         end
         
+
+        
         -- draw.SimpleText(selectedWeapons[1],imgui.xFont("!Arial Rounded MT Bold@30"),19,85,nil,nil,1)
-        if imgui.xButton(275,82,50,50,50,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //right button
-            print("rat")
+        if imgui.xButton(275,82,50,50,5,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //right button
+            if CanPress then
+                CanPress = false 
+                net.Start("SetNextSelection",true)
+                net.WriteBool(true)
+                net.SendToServer()
+                if(selectedIndex == #selectedWeapons) then       //if selected weapon is last weapon, next in the right should be first from weapons table
+                    selectedIndex= 1
+                else                                                    
+                    selectedIndex= selectedIndex+1      
+                end
+                timer.Simple(0.1,function ()
+                    CanPress = true
+                end)
+            end
+            
         end
         local hovering = imgui.IsHovering(-500, 0, 1000, 1000)
 
@@ -54,8 +71,20 @@ function ENT:Draw()
             
         
       
-        if imgui.xButton(-96,82,50,50,50,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //left button
-            print("rat")
+        if imgui.xButton(-96,82,50,50,5,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //left button
+            if CanPress then
+                net.Start("SetNextSelection",true)
+                net.WriteBool(false)
+                net.SendToServer()
+                if(selectedIndex == 1) then
+                    selectedIndex = #selectedWeapons
+                else
+                    selectedIndex=selectedIndex-1
+                end
+                timer.Simple(0.1,function ()
+                    CanPress = true 
+                end)
+            end
            
         end
 
