@@ -56,6 +56,7 @@ function ENT:Draw()
         if imgui.xButton(275,82,50,50,5,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //right button
             if CanPress then
                 CanPress = false 
+                sound.Play( "buttons/button15.wav", self:GetPos() ) 
                 net.Start("SetNextSelection",true)
                 net.WriteBool(true)
                 net.SendToServer()
@@ -64,7 +65,7 @@ function ENT:Draw()
                 else                                                    
                     selectedIndex= selectedIndex+1      
                 end
-                timer.Simple(0.1,function ()
+                timer.Simple(0.2,function ()
                     CanPress = true
                 end)
             end
@@ -86,7 +87,8 @@ function ENT:Draw()
       
         if imgui.xButton(-96,82,50,50,5,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //left button
             if CanPress then
-                
+                CanPress = false
+                sound.Play( "buttons/button15.wav", self:GetPos() ) 
                 net.Start("SetNextSelection",true)
                 net.WriteBool(false)
                 net.SendToServer()
@@ -95,7 +97,7 @@ function ENT:Draw()
                 else
                     selectedIndex=selectedIndex-1
                 end
-                timer.Simple(0.1,function ()
+                timer.Simple(0.2,function ()
                     CanPress = true 
                 end)
             end
