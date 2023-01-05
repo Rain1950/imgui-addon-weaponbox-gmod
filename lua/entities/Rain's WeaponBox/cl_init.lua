@@ -6,12 +6,6 @@ local imgui = include("imgui.lua")
 local BackGroundColor = Color(187,187,187,100) 
 
 
-function ENT:SetupDataTables()
-
-    self:NetworkVar("Bool",0,"RandomSupply")
-
-end
-
 
 
 

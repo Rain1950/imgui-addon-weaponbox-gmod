@@ -16,14 +16,6 @@ util.AddNetworkString("SetNextSelection")
 
 
 
-function ENT:SetupDataTables()
-
-    self:NetworkVar("Bool",0,"RandomSupply")
-
-end
-
-
-
 function ENT:SetWeaponsTable(weaponTable)
     self.weapons = weaponTable
 end
