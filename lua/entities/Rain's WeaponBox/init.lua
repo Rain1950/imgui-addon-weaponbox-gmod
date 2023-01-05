@@ -62,6 +62,7 @@ function ENT:Initialize()
     self:DrawShadow(false )  //remove shadow from crate
     intialColor = self:GetColor()  //set initialColor to default color of the entity
     self.CurrentlySelected = 1
+    self:SetCanUse(true)
 
 end
 
@@ -82,12 +83,12 @@ end)
 local canUse = true
  
 function ENT:Use(caller,activator)
-    if canUse && IsValid(self) && !isHovering  then
+    if self:GetCanUse() && IsValid(self) && !isHovering  then
 
        
      
         self:SetColor(Color(218,26,26,10))   //interaction color
-        canUse = false  //simple bool to limit rate at which player can use weapon box
+        self:SetCanUse(false)  //simple bool to limit rate at which player can use weapon box
         timer.Simple(1,function ()
             if IsValid(self)  then
                 if self:GetRandomSupply()  then
@@ -103,7 +104,7 @@ function ENT:Use(caller,activator)
                 sound.Play( "buttons/combine_button5.wav", self:GetPos() ) 
                 self:SetColor(intialColor) //set weaponbox color to itself
             end
-            canUse = true
+            self:SetCanUse(true )
         end)
 
     end
