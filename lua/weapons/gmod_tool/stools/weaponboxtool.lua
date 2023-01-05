@@ -83,8 +83,12 @@ function TOOL.BuildCPanel( panel )
 
     function supplyAmount:OnChange (val)
 		if(IsValid(supplyAmount)) then
-			net.Start("LimitedSupplyAmount",true )
-			net.WriteInt(val)
+			local  amount = tonumber(supplyAmount:GetValue())
+			if( amount == nil|| amount < 1  )  then
+				amount = 1
+			end
+			net.Start("LimitedSupplyAm",true )
+			net.WriteInt(tonumber(amount),32)
 			net.SendToServer()
 		end
 	end
@@ -157,13 +161,12 @@ function TOOL.BuildCPanel( panel )
 end
 
 
+LimitedSupplyBool = false 
+
 net.Receive("selectedWeaponsTable",function ()
 	selectedWeapons = net.ReadTable()
 end)
 
-net.Receive("LimitedSupplyAmount",function ()
-	LimitedSupplyAmount = net.ReadInt()
-end)
 
 net.Receive("LimitedSupplyBool",function ()
 	LimitedSupplyBool = net.ReadBool()
@@ -173,6 +176,10 @@ net.Receive("RandomSupplyBool",function ()
 	RandomSupplyBool = net.ReadBool()
 end)
 
+net.Receive("LimitedSupplyAm",function ()
+	LSAmount = net.ReadInt(32)
+	print(LSAmount)
+end)
 
 function TOOL:LeftClick( trace )
 	if(#selectedWeapons < 1) then return false end
@@ -190,9 +197,14 @@ function TOOL:LeftClick( trace )
 	weaponbox:SetPos(weaponbox:LocalToWorld(Vector(0,0,15)))
 	weaponbox:SetAngles(ang)
 	weaponbox:SetWeaponsTable(selectedWeapons)
-	weaponbox:SetLimitedSupply(LimitedSupplyBool)
-	weaponbox:SetLimitedSupplyAmount(LimitedSupplyAmount)
 	weaponbox:SetRandomSupply(RandomSupplyBool)
+	weaponbox:SetLimitedSupply(LimitedSupplyBool)
+	if (LimitedSupplyBool) then
+		if LSAmount == nil && !IsValid(LSAmount) then
+			LSAmount = 1
+		end 
+		weaponbox:SetLimitedSupplyAmount(LSAmount)
+	end
 	weaponbox:Spawn()
 
 	
@@ -217,7 +229,9 @@ hook.Add("Think","ClampSupplyAmount",function ()
 		if(tonumber(supplyAmount:GetValue()) > 999 || tonumber(supplyAmount:GetValue()) < 1 ) then
 			supplyAmount:SetValue(999)   //clamp supplyamount to 999
 		end
-	end 
+	elseif IsValid(supplyAmount)  && !IsValid(supplyAmount:GetValue()) then
+		supplyAmount:SetValue(1)
+	end
 end)
 
 

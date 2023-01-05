@@ -18,7 +18,7 @@ nextButton.pressColor = Color(20,20,20,255)
 
  currentlySelected = 1
 local previousState = false   
-selectedIndex = 1
+
 
 
 local RightArrowMat = Material("arrow1.png")
@@ -30,14 +30,28 @@ local CanPress  = true
 
 
 function ENT:Draw()
-    
+    selectedIndex = self:GetSelectedIndex()
     self:DrawModel()     
     if imgui.Entity3D2D(self,Vector(17,-11.5,12) , Angle(0,90,90),0.1) then
-       
+        
+
         if self:GetRandomSupply() == true  then
             draw.SimpleText("Weapon Box",imgui.xFont("!Arial Rounded MT Bold@60"),-35,-65)
             imgui.End3D2D()
-        else 
+        else
+           
+            if(self:GetLimitedSupply()) then
+                local amount = self:GetLimitedSupplyAmount()
+                if amount < 100 then
+                    draw.RoundedBox(15,86,17,50,50,BackGroundColor)
+                    draw.SimpleText(amount,imgui.xFont("!Arial Rounded MT Bold@60"),95,10)
+                else
+                    draw.SimpleText(amount,imgui.xFont("!Arial Rounded MT Bold@60"),60,10)
+                    draw.RoundedBox(15,35,17,150,50,BackGroundColor)
+                end
+                
+            end
+
             surface.SetDrawColor(255,255,255)
             surface.SetMaterial(RightArrowMat)    //right arrow
             surface.DrawTexturedRect(263,68,75,75)
@@ -64,11 +78,6 @@ function ENT:Draw()
                     net.Start("SetNextSelection",true)
                     net.WriteBool(true)
                     net.SendToServer()
-                    if(selectedIndex == #selectedWeapons) then       //if selected weapon is last weapon, next in the right should be first from weapons table
-                        selectedIndex= 1
-                    else                                                    
-                        selectedIndex= selectedIndex+1      
-                    end
                     timer.Simple(0.2,function ()
                         CanPress = true
                     end)
@@ -96,11 +105,7 @@ function ENT:Draw()
                     net.Start("SetNextSelection",true)
                     net.WriteBool(false)
                     net.SendToServer()
-                    if(selectedIndex == 1) then
-                        selectedIndex = #selectedWeapons
-                    else
-                        selectedIndex=selectedIndex-1
-                    end
+    
                     timer.Simple(0.2,function ()
                         CanPress = true 
                     end)

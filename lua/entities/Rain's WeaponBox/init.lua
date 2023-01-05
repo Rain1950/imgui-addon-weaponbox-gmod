@@ -10,7 +10,7 @@ util.AddNetworkString("ChangeColor")
 util.AddNetworkString("isHovering") 
 util.AddNetworkString("selectedWeaponsTable") 
 util.AddNetworkString("RandomSupplyBool")
-util.AddNetworkString("LimitedSupplyAmount")
+util.AddNetworkString("LimitedSupplyAm")
 util.AddNetworkString("LimitedSupplyBool")
 util.AddNetworkString("SetNextSelection")
 
@@ -20,15 +20,12 @@ function ENT:SetWeaponsTable(weaponTable)
     self.weapons = weaponTable
 end
 
-function ENT:SetLimitedSupply(LimitedSupply)
+function ENT:SetLimitedSupplyBool(LimitedSupply)
     self.LimitedSupply = LimitedSupply
   
 end
 
-function ENT:SetLimitedSupplyAmount(amount)
-    self.LimitedSupplyAmount = amount
 
-end
 
 
 
@@ -48,6 +45,7 @@ function ENT:SetNextSelection(right)
             self.CurrentlySelected=self.CurrentlySelected-1
         end
     end
+    self:SetSelectedIndex(self.CurrentlySelected)
 end
 
     
@@ -63,6 +61,8 @@ function ENT:Initialize()
     intialColor = self:GetColor()  //set initialColor to default color of the entity
     self.CurrentlySelected = 1
     self:SetCanUse(true)
+    self:SetSelectedIndex(1)
+    print(self:GetLimitedSupplyAmount())
 
 end
 
