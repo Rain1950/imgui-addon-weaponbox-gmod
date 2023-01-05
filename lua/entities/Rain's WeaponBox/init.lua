@@ -16,10 +16,13 @@ util.AddNetworkString("SetNextSelection")
 
 
 
+function ENT:SetupDataTables()
 
-function  ENT:SetRandomSupply(RandomSupply)
-    self.RandomSupply = RandomSupply
+    self:NetworkVar("Bool",0,"RandomSupply")
+
 end
+
+
 
 function ENT:SetWeaponsTable(weaponTable)
     self.weapons = weaponTable
@@ -34,6 +37,8 @@ function ENT:SetLimitedSupplyAmount(amount)
     self.LimitedSupplyAmount = amount
 
 end
+
+
 
 
 
@@ -65,7 +70,7 @@ function ENT:Initialize()
     self:DrawShadow(false )  //remove shadow from crate
     intialColor = self:GetColor()  //set initialColor to default color of the entity
     self.CurrentlySelected = 1
-    
+
 end
 
 
@@ -91,12 +96,9 @@ function ENT:Use(caller,activator)
      
         self:SetColor(Color(218,26,26,10))   //interaction color
         canUse = false  //simple bool to limit rate at which player can use weapon box
-        net.Start("ChangeColor")
-        net.WriteColor(Color(255,255,255,255),true )
-        net.Broadcast()
         timer.Simple(1,function ()
             if IsValid(self)  then
-                if self.RandomSupply  then
+                if self:GetRandomSupply()  then
                     weapon = ents.Create(self.weapons[math.random(1,#self.weapons)]) //set weapon class to random from weaponsTable
                 else
                     weapon = ents.Create(self.weapons[weaponbox.CurrentlySelected]) //set weapon class to random from weaponsTable

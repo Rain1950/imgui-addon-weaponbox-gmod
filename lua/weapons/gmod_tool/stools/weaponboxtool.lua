@@ -195,6 +195,7 @@ function TOOL:LeftClick( trace )
 	weaponbox:SetLimitedSupplyAmount(LimitedSupplyAmount)
 	weaponbox:SetRandomSupply(RandomSupplyBool)
 	weaponbox:Spawn()
+
 	
 
 	undo.Create( "Rain's Weapon Box" )
