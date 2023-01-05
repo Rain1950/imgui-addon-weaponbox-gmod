@@ -144,7 +144,6 @@ function TOOL.BuildCPanel( panel )
         net.Start("RandomSupplyBool",true)
 		net.WriteBool(val)
 		net.SendToServer()
-		print("RSCheckbox sent",val)
 		if(!val) then
 			RSCheckbox:SetTextColor(uncheckedColor)	
 		else

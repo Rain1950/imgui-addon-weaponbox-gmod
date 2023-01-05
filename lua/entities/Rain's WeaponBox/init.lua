@@ -114,7 +114,6 @@ end
 function ENT:Think()
     net.Receive("SetNextSelection",function ()
         nextSelection = net.ReadBool()
-        print(nextSelection)
         self:SetNextSelection(nextSelection)
     end)
 end
