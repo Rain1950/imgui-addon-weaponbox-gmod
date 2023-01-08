@@ -181,6 +181,9 @@ net.Receive("LimitedSupplyAm",function ()
 	print(LSAmount)
 end)
 
+
+
+
 function TOOL:LeftClick( trace )
 	if(#selectedWeapons < 1) then return false end
 	if ( trace.HitSky or !trace.HitPos or trace.HitNormal.z < 0.7 ) then return false end

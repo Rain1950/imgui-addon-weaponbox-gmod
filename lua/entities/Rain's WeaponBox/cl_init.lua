@@ -13,10 +13,7 @@ local nextButton = {}
 nextButton.DefaultColor = Color(170,170,170)
 nextButton.HoverColor = Color(102,105,102)
 nextButton.pressColor = Color(20,20,20,255)
-
-
-
- currentlySelected = 1
+currentlySelected = 1
 local previousState = false   
 
 
@@ -29,28 +26,57 @@ local CanPress  = true
 
 
 
+function  DecreaseWeaponNumber(weaponIndex,ent)
+    net.Start("DecreaseWeaponNumber")
+    net.WriteEntity(ent)
+    net.WriteInt(weaponIndex,32)
+    net.SendToServer()
+end
+
+
+
+function GetWeaponNumber(weaponIndex,ent)
+    net.Start("GetWeaponNumber")
+    net.WriteEntity(ent)
+    net.WriteInt(weaponIndex,32)
+    net.SendToServer()
+end
+
+
+
+net.Receive("ReturnWeaponNumber",function ()
+    local number = net.ReadInt(32)
+    local ent = net.ReadEntity()
+    ent.weaponNumber = number
+end)
+
+
+
 function ENT:Draw()
     selectedIndex = self:GetSelectedIndex()
     self:DrawModel()     
     if imgui.Entity3D2D(self,Vector(17,-11.5,12) , Angle(0,90,90),0.1) then
         
 
+        if(self:GetLimitedSupply()) then
+            local amount = self:GetLimitedSupplyAmount()
+            if amount < 100 then
+                draw.RoundedBox(15,86,17,50,50,BackGroundColor)
+                draw.SimpleText(self.weaponNumber,imgui.xFont("!Arial Rounded MT Bold@60"),95,10)
+            else
+                draw.SimpleText(self.weaponNumber,imgui.xFont("!Arial Rounded MT Bold@60"),60,10)
+                draw.RoundedBox(15,35,17,150,50,BackGroundColor)
+            end
+            
+        end
+
+
         if self:GetRandomSupply() == true  then
             draw.SimpleText("Weapon Box",imgui.xFont("!Arial Rounded MT Bold@60"),-35,-65)
             imgui.End3D2D()
         else
            
-            if(self:GetLimitedSupply()) then
-                local amount = self:GetLimitedSupplyAmount()
-                if amount < 100 then
-                    draw.RoundedBox(15,86,17,50,50,BackGroundColor)
-                    draw.SimpleText(amount,imgui.xFont("!Arial Rounded MT Bold@60"),95,10)
-                else
-                    draw.SimpleText(amount,imgui.xFont("!Arial Rounded MT Bold@60"),60,10)
-                    draw.RoundedBox(15,35,17,150,50,BackGroundColor)
-                end
-                
-            end
+    
 
             surface.SetDrawColor(255,255,255)
             surface.SetMaterial(RightArrowMat)    //right arrow
@@ -68,11 +94,9 @@ function ENT:Draw()
                 draw.DrawText(selectedWeapons[selectedIndex],imgui.xFont("!Arial Rounded MT Bold@24"),110,85,nil,TEXT_ALIGN_CENTER)
             end
         
-
-        
-        -- draw.SimpleText(selectedWeapons[1],imgui.xFont("!Arial Rounded MT Bold@30"),19,85,nil,nil,1)
             if imgui.xButton(275,82,50,50,5,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //right button
                 if CanPress then
+                    GetWeaponNumber(self:GetSelectedIndex(),self)
                     CanPress = false 
                     sound.Play( "buttons/button15.wav", self:GetPos() ) 
                     net.Start("SetNextSelection",true)
@@ -100,6 +124,7 @@ function ENT:Draw()
       
             if imgui.xButton(-96,82,50,50,5,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //left button
                 if CanPress then
+                    GetWeaponNumber(self:GetSelectedIndex(),self)
                     CanPress = false
                     sound.Play( "buttons/button15.wav", self:GetPos() ) 
                     net.Start("SetNextSelection",true)

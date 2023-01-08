@@ -13,18 +13,52 @@ util.AddNetworkString("RandomSupplyBool")
 util.AddNetworkString("LimitedSupplyAm")
 util.AddNetworkString("LimitedSupplyBool")
 util.AddNetworkString("SetNextSelection")
-
+util.AddNetworkString("DecreaseWeaponNumber")
+util.AddNetworkString("ReturnWeaponNumberDecreased")
+util.AddNetworkString("GetWeaponNumber")
+util.AddNetworkString("ReturnWeaponNumber")
 
 
 function ENT:SetWeaponsTable(weaponTable)
     self.weapons = weaponTable
 end
 
+
+
 function ENT:SetLimitedSupplyBool(LimitedSupply)
     self.LimitedSupply = LimitedSupply
   
 end
 
+
+function DecreaseWeaponAmount(entity,weaponIndex)
+    if(entity.InvertedWeaponTable[entity.weapons[weaponIndex]] >=  1) then
+        entity.InvertedWeaponTable[entity.weapons[weaponIndex]] = entity.InvertedWeaponTable[entity.weapons[weaponIndex]] -1 
+    end
+
+end
+
+
+function GetWeaponAmount(entity,weaponIndex)
+    return  entity.InvertedWeaponTable[entity.weapons[weaponIndex]] 
+end
+
+
+net.Receive("DecreaseWeaponNumber",function ()
+    local  ent = net.ReadEntity()
+    local weaponIndex = net.ReadInt(32)
+    DecreaseWeaponAmount(ent,weaponIndex)
+end)
+
+net.Receive("GetWeaponNumber",function (len,ply)
+    local ent = net.ReadEntity()
+    local weaponIndex = net.ReadInt(32)
+    local weaponAmount = GetWeaponAmount(ent,weaponIndex)
+    net.Start("ReturnWeaponNumber")
+    net.WriteInt(weaponAmount,32)
+    net.WriteEntity(ent)
+    net.Send(ply)
+end)
 
 
 
@@ -62,7 +96,11 @@ function ENT:Initialize()
     self.CurrentlySelected = 1
     self:SetCanUse(true)
     self:SetSelectedIndex(1)
-    print(self:GetLimitedSupplyAmount())
+
+    self.InvertedWeaponTable = {}   // table used for retrieving amount of choosen weapon type left.
+    for k,v in pairs(self.weapons) do
+        self.InvertedWeaponTable[v]=self:GetLimitedSupplyAmount() + math.random(0,10)
+    end
 
 end
 
