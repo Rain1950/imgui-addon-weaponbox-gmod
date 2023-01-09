@@ -51,19 +51,30 @@ net.Receive("ReturnWeaponNumber",function ()
 end)
 
 
+net.Receive("selectedWeaponsTableClient",function ()
+    local ent = net.ReadEntity()
+    local table = net.ReadTable()
+    ent.weapons = table
+    
+end)
+
 
 function ENT:Draw()
-    selectedIndex = self:GetSelectedIndex()
     self:DrawModel()     
     if imgui.Entity3D2D(self,Vector(17,-11.5,12) , Angle(0,90,90),0.1) then
         
 
         if(self:GetLimitedSupply()) then
-            local amount = self:GetLimitedSupplyAmount()
-            if amount < 100 then
+            local amount = self:GetLimitedSupplyAmount() // neeed to take to account that every weapon could have amount from different range (for example 99 and 101)
+            if amount < 100 && amount > 10  then
+                draw.RoundedBox(15,75,17,80,50,BackGroundColor)
+                draw.SimpleText(self.weaponNumber,imgui.xFont("!Arial Rounded MT Bold@60"),86,10)
+
+            elseif (amount < 10 ) then
                 draw.RoundedBox(15,86,17,50,50,BackGroundColor)
                 draw.SimpleText(self.weaponNumber,imgui.xFont("!Arial Rounded MT Bold@60"),95,10)
-            else
+                
+            elseif (amount < 1000) then
                 draw.SimpleText(self.weaponNumber,imgui.xFont("!Arial Rounded MT Bold@60"),60,10)
                 draw.RoundedBox(15,35,17,150,50,BackGroundColor)
             end
@@ -88,15 +99,16 @@ function ENT:Draw()
 
             surface.SetDrawColor(BackGroundColor) 
             draw.RoundedBox(15,-35,75,300,60,BackGroundColor)
-            if(selectedWeapons[selectedIndex]:len() < 15) then
-                draw.DrawText(selectedWeapons[selectedIndex],imgui.xFont("!Arial Rounded MT Bold@30"),110,85,nil,TEXT_ALIGN_CENTER)
+            if(self.weapons[self:GetSelectedIndex()]:len() < 15) then
+                draw.DrawText(self.weapons[self:GetSelectedIndex()],imgui.xFont("!Arial Rounded MT Bold@30"),110,85,nil,TEXT_ALIGN_CENTER)
             else
-                draw.DrawText(selectedWeapons[selectedIndex],imgui.xFont("!Arial Rounded MT Bold@24"),110,85,nil,TEXT_ALIGN_CENTER)
+                draw.DrawText(self.weapons[self:GetSelectedIndex()],imgui.xFont("!Arial Rounded MT Bold@24"),110,85,nil,TEXT_ALIGN_CENTER)
             end
         
             if imgui.xButton(275,82,50,50,5,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //right button
                 if CanPress then
                     GetWeaponNumber(self:GetSelectedIndex(),self)
+                    print(self:GetSelectedIndex())
                     CanPress = false 
                     sound.Play( "buttons/button15.wav", self:GetPos() ) 
                     net.Start("SetNextSelection",true)

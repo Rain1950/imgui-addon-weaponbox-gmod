@@ -9,6 +9,7 @@ resource.AddFile("arrow(2).png")   //navigation arrows
 util.AddNetworkString("ChangeColor") 
 util.AddNetworkString("isHovering") 
 util.AddNetworkString("selectedWeaponsTable") 
+util.AddNetworkString("selectedWeaponsTableClient") 
 util.AddNetworkString("RandomSupplyBool")
 util.AddNetworkString("LimitedSupplyAm")
 util.AddNetworkString("LimitedSupplyBool")
@@ -19,8 +20,12 @@ util.AddNetworkString("GetWeaponNumber")
 util.AddNetworkString("ReturnWeaponNumber")
 
 
-function ENT:SetWeaponsTable(weaponTable)
+function ENT:SetWeaponsTable(weaponTable,ply)
     self.weapons = weaponTable
+    net.Start("selectedWeaponsTableClient")
+    net.WriteEntity(self)
+    net.WriteTable(weaponTable)
+    net.Send(ply)
 end
 
 
