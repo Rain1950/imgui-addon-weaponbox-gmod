@@ -104,7 +104,7 @@ function ENT:Initialize()
 
     self.InvertedWeaponTable = {}   // table used for retrieving amount of choosen weapon type left.
     for k,v in pairs(self.weapons) do
-        self.InvertedWeaponTable[v]=self:GetLimitedSupplyAmount() + math.random(0,10)
+        self.InvertedWeaponTable[v]=self:GetLimitedSupplyAmount()
     end
 
 end
@@ -159,5 +159,7 @@ function ENT:Think()
         nextSelection = net.ReadBool()
         self:SetNextSelection(nextSelection)
     end)
+
+   
 end
 
