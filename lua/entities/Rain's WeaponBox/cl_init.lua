@@ -115,6 +115,7 @@ function ENT:Draw()
                     CanPress = false 
                     sound.Play( "buttons/button15.wav", self:GetPos() ) 
                     net.Start("SetNextSelection",true)
+                    net.WriteEntity(self)
                     net.WriteBool(true)
                     net.SendToServer()
                     timer.Simple(0.2,function ()

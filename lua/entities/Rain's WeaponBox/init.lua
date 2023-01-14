@@ -104,7 +104,7 @@ function ENT:Initialize()
 
     self.InvertedWeaponTable = {}   // table used for retrieving amount of choosen weapon type left.
     for k,v in pairs(self.weapons) do
-        self.InvertedWeaponTable[v]=self:GetLimitedSupplyAmount()
+        self.InvertedWeaponTable[v]=self:GetLimitedSupplyAmount() 
     end
 
 end
@@ -156,8 +156,9 @@ end
 
 function ENT:Think()
     net.Receive("SetNextSelection",function ()
+        ent = net.ReadEntity()
         nextSelection = net.ReadBool()
-        self:SetNextSelection(nextSelection)
+        ent:SetNextSelection(nextSelection)
     end)
 
    
