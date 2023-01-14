@@ -65,19 +65,22 @@ function ENT:Draw()
         
 
         if(self:GetLimitedSupply()) then
-            local amount = self:GetLimitedSupplyAmount() // neeed to take to account that every weapon could have amount from different range (for example 99 and 101)
-            if amount < 100 && amount > 10  then
-                draw.RoundedBox(15,75,17,80,50,BackGroundColor)
-                draw.SimpleText(self.weaponNumber,imgui.xFont("!Arial Rounded MT Bold@60"),86,10)
-
-            elseif (amount < 10 ) then
-                draw.RoundedBox(15,86,17,50,50,BackGroundColor)
-                draw.SimpleText(self.weaponNumber,imgui.xFont("!Arial Rounded MT Bold@60"),95,10)
-                
-            elseif (amount < 1000) then
-                draw.SimpleText(self.weaponNumber,imgui.xFont("!Arial Rounded MT Bold@60"),60,10)
-                draw.RoundedBox(15,35,17,150,50,BackGroundColor)
+            local amount = self.weaponNumber 
+            if(self.weaponNumber != nil ) then
+                if amount < 10 then
+                    draw.RoundedBox(15,86,17,50,50,BackGroundColor)
+                    draw.SimpleText(self.weaponNumber,imgui.xFont("!Arial Rounded MT Bold@60"),95,10)
+    
+                elseif (amount < 100 ) then
+                    draw.RoundedBox(15,75,17,80,50,BackGroundColor)
+                    draw.SimpleText(self.weaponNumber,imgui.xFont("!Arial Rounded MT Bold@60"),86,10)
+                    
+                elseif (amount < 1000) then
+                    draw.SimpleText(self.weaponNumber,imgui.xFont("!Arial Rounded MT Bold@60"),60,10)
+                    draw.RoundedBox(15,35,17,150,50,BackGroundColor)
+                end
             end
+                
             
         end
 
