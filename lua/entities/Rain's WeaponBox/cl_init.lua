@@ -175,6 +175,10 @@ function ENT:Draw()
 
 end
 
+function ENT:Initialize()
+    GetWeaponNumber(self:GetSelectedIndex(),self)  // show weapon amount on intialization
+end
+
 
 function ENT:Think()
 
