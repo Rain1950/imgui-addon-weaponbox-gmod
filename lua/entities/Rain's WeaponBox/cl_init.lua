@@ -59,6 +59,13 @@ net.Receive("selectedWeaponsTableClient",function ()
 end)
 
 
+net.Receive("UpdateWeaponAmount", function ()
+    local ent = net.ReadEntity()
+    local amount = net.ReadInt(32)
+    ent.weaponNumber = amount
+end)
+
+
 function ENT:Draw()
     self:DrawModel()     
     if imgui.Entity3D2D(self,Vector(17,-11.5,12) , Angle(0,90,90),0.1) then
@@ -111,7 +118,6 @@ function ENT:Draw()
             if imgui.xButton(275,82,50,50,5,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //right button
                 if CanPress then
                     GetWeaponNumber(self:GetSelectedIndex(),self)
-                    print(self:GetSelectedIndex())
                     CanPress = false 
                     sound.Play( "buttons/button15.wav", self:GetPos() ) 
                     net.Start("SetNextSelection",true)
@@ -144,6 +150,7 @@ function ENT:Draw()
                     CanPress = false
                     sound.Play( "buttons/button15.wav", self:GetPos() ) 
                     net.Start("SetNextSelection",true)
+                    net.WriteEntity(self)
                     net.WriteBool(false)
                     net.SendToServer()
     

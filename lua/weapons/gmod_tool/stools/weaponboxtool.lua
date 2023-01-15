@@ -178,7 +178,6 @@ end)
 
 net.Receive("LimitedSupplyAm",function ()
 	LSAmount = net.ReadInt(32)
-	print(LSAmount)
 end)
 
 
