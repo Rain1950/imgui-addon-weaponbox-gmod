@@ -53,8 +53,10 @@ end)
 
 net.Receive("selectedWeaponsTableClient",function ()
     local ent = net.ReadEntity()
-    local table = net.ReadTable()
-    ent.weapons = table
+    local weaponTable = net.ReadTable()
+    ent.weapons = weaponTable
+    print(#weaponTable)
+    print(ent)
     
 end)
 
@@ -95,10 +97,8 @@ function ENT:Draw()
         if self:GetRandomSupply() == true  then
             draw.SimpleText("Weapon Box",imgui.xFont("!Arial Rounded MT Bold@60"),-35,-65)
             imgui.End3D2D()
-        else
-           
-    
-
+        elseif (self.weaponNumber != nil) then 
+        
             surface.SetDrawColor(255,255,255)
             surface.SetMaterial(RightArrowMat)    //right arrow
             surface.DrawTexturedRect(263,68,75,75)
@@ -114,6 +114,7 @@ function ENT:Draw()
             else
                 draw.DrawText(self.weapons[self:GetSelectedIndex()],imgui.xFont("!Arial Rounded MT Bold@24"),110,85,nil,TEXT_ALIGN_CENTER)
             end
+            GetWeaponNumber(self:GetSelectedIndex(),self)
         
             if imgui.xButton(275,82,50,50,5,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //right button
                 if CanPress then

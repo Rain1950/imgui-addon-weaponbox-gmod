@@ -22,6 +22,7 @@ util.AddNetworkString("UpdateWeaponAmount")
 
 
 function ENT:SetWeaponsTable(weaponTable,ply)
+
     self.weapons = weaponTable
     net.Start("selectedWeaponsTableClient")
     net.WriteEntity(self)
@@ -32,6 +33,7 @@ end
 
 
 function ENT:SetLimitedSupplyBool(LimitedSupply)
+    print(self)
     self.LimitedSupply = LimitedSupply
   
 end
@@ -42,13 +44,10 @@ function ENT:DecreaseWeaponAmount(weaponIndex,player)
     if(self.InvertedWeaponTable[self.weapons[weaponIndex]] >=  1) then
         self.InvertedWeaponTable[self.weapons[weaponIndex]] = self.InvertedWeaponTable[self.weapons[weaponIndex]] -1 
     end
-    print(self.InvertedWeaponTable[self.weapons[weaponIndex]])
-
     net.Start("UpdateWeaponAmount")
     net.WriteEntity(self)
     net.WriteInt(self.InvertedWeaponTable[self.weapons[weaponIndex]],32)
     net.Send(player)
-
 
 end
 
@@ -110,7 +109,13 @@ function ENT:Initialize()
     self.InvertedWeaponTable = {}   // table used for retrieving amount of choosen weapon type left.
     for k,v in pairs(self.weapons) do
         self.InvertedWeaponTable[v]=self:GetLimitedSupplyAmount() 
+        
     end
+    net.Start("UpdateWeaponAmount")
+    net.WriteEntity(self)
+    net.WriteInt(self.InvertedWeaponTable[self.weapons[1]],32)
+    net.Broadcast()
+   
 
 end
 

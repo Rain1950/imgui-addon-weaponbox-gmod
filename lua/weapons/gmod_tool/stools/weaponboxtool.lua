@@ -198,7 +198,6 @@ function TOOL:LeftClick( trace )
 	weaponbox:SetPos(trace.HitPos)
 	weaponbox:SetPos(weaponbox:LocalToWorld(Vector(0,0,15)))
 	weaponbox:SetAngles(ang)
-	weaponbox:SetWeaponsTable(selectedWeapons,ply)
 	weaponbox:SetRandomSupply(RandomSupplyBool)
 	weaponbox:SetLimitedSupply(LimitedSupplyBool)
 	if (LimitedSupplyBool) then
@@ -208,7 +207,11 @@ function TOOL:LeftClick( trace )
 		weaponbox:SetLimitedSupplyAmount(LSAmount)
 	end
 	weaponbox:Spawn()
-	
+	timer.Simple(0, function()
+		if IsValid(weaponbox) then
+		  weaponbox:SetWeaponsTable(selectedWeapons, ply)
+		end
+	end)
 
 	
 
