@@ -113,7 +113,12 @@ function ENT:Draw()
             else
                 draw.DrawText(self.weapons[self:GetSelectedIndex()],imgui.xFont("!Arial Rounded MT Bold@24"),110,85,nil,TEXT_ALIGN_CENTER)
             end
-            GetWeaponNumber(self:GetSelectedIndex(),self)
+            timer.Simple(1,function ()
+                if IsValid(self) then
+                    GetWeaponNumber(self:GetSelectedIndex(),self)
+                end
+            end)
+            
         
             if imgui.xButton(275,82,50,50,5,nextButton.DefaultColor,nextButton.HoverColor, nextButton.pressColor) then   //right button
                 if CanPress then
@@ -176,8 +181,10 @@ function ENT:Draw()
 end
 
 function ENT:Initialize()
-    timer.Simple(0.1,function ()
-        GetWeaponNumber(self:GetSelectedIndex(),self) // show weapon amount on intialization
+    timer.Simple(1,function ()
+        if IsValid(self) then
+            GetWeaponNumber(self:GetSelectedIndex(),self) // show weapon amount on intialization
+        end
     end)
     
 end

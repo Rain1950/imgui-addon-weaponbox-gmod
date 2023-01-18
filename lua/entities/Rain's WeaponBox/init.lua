@@ -110,6 +110,7 @@ function ENT:Initialize()
     self:SetSelectedIndex(1)
     
     timer.Simple(0.05,function ()
+        if !IsValid(self) then return end
         self.InvertedWeaponTable = {}   // table used for retrieving amount of choosen weapon type left.
         for k,v in pairs(self.weapons) do
             self.InvertedWeaponTable[v]=self:GetLimitedSupplyAmount() 
@@ -142,7 +143,6 @@ local canUse = true
  
 function ENT:Use(caller,activator)
     if self:GetCanUse() && IsValid(self) && !isHovering  then
-
        
      
         self:SetColor(Color(218,26,26,10))   //interaction color
@@ -161,7 +161,7 @@ function ENT:Use(caller,activator)
 
 
                 else // if selection mode 
-                    if (self:GetWeaponAmount(weaponbox.CurrentlySelected) > 0 ) then
+                    if (IsValid(self) && self:GetWeaponAmount(weaponbox.CurrentlySelected) != nil &&   self:GetWeaponAmount(weaponbox.CurrentlySelected) > 0 ) then
                         weapon = ents.Create(self.weapons[weaponbox.CurrentlySelected]) //set weapon class to choosen from weaponsTable
                         weapon:SetPos(self:LocalToWorld(Vector(0,0,30)))  //set weapon position 30 units up relative to weapon box
                         weapon:SetMoveType(MOVETYPE_NONE) // make weapon also static
@@ -181,8 +181,10 @@ function ENT:Use(caller,activator)
 
 
             end
+            if IsValid(self) then
 
-            self:SetCanUse(true )
+                self:SetCanUse(true )
+            end
 
         end)
 
