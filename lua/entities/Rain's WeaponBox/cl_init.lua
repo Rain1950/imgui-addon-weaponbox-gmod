@@ -55,10 +55,9 @@ net.Receive("selectedWeaponsTableClient",function ()
     local ent = net.ReadEntity()
     local weaponTable = net.ReadTable()
     ent.weapons = weaponTable
-    print(#weaponTable)
-    print(ent)
     
 end)
+
 
 
 net.Receive("UpdateWeaponAmount", function ()
@@ -69,10 +68,8 @@ end)
 
 
 function ENT:Draw()
-    self:DrawModel()     
+    self:DrawModel()   
     if imgui.Entity3D2D(self,Vector(17,-11.5,12) , Angle(0,90,90),0.1) then
-        
-
         if(self:GetLimitedSupply()) then
             local amount = self.weaponNumber 
             if(self.weaponNumber != nil ) then
@@ -92,12 +89,14 @@ function ENT:Draw()
                 
             
         end
-
+        
+        
+        
 
         if self:GetRandomSupply() == true  then
             draw.SimpleText("Weapon Box",imgui.xFont("!Arial Rounded MT Bold@60"),-35,-65)
-            imgui.End3D2D()
-        elseif (self.weaponNumber != nil) then 
+           
+        elseif (self.weapons != nil) then
         
             surface.SetDrawColor(255,255,255)
             surface.SetMaterial(RightArrowMat)    //right arrow
@@ -163,11 +162,11 @@ function ENT:Draw()
             end
 
         
-            imgui.End3D2D()
+            
         end
+        imgui.End3D2D()
         
     end
-
     if imgui.Entity3D2D(self,Vector(17,-11.7,12) , Angle(0,90,90),0.1) then
         draw.RoundedBox(15,-70,-60,380,60,Color(134,134,134,91))
         imgui.End3D2D()
@@ -177,7 +176,10 @@ function ENT:Draw()
 end
 
 function ENT:Initialize()
-    GetWeaponNumber(self:GetSelectedIndex(),self)  // show weapon amount on intialization
+    timer.Simple(0.1,function ()
+        GetWeaponNumber(self:GetSelectedIndex(),self) // show weapon amount on intialization
+    end)
+    
 end
 
 

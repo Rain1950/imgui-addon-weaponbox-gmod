@@ -209,7 +209,7 @@ function TOOL:LeftClick( trace )
 	weaponbox:Spawn()
 	timer.Simple(0, function()
 		if IsValid(weaponbox) then
-		  weaponbox:SetWeaponsTable(selectedWeapons, ply)
+			weaponbox:SetWeaponsTable(selectedWeapons, ply) // wait 1 tick to wait for the information to be sent to the client
 		end
 	end)
 
