@@ -161,8 +161,8 @@ function ENT:Use(caller,activator)
 
 
                 else // if selection mode 
-                    if (IsValid(self) && self:GetWeaponAmount(weaponbox.CurrentlySelected) != nil &&   self:GetWeaponAmount(weaponbox.CurrentlySelected) > 0 ) then
-                        weapon = ents.Create(self.weapons[weaponbox.CurrentlySelected]) //set weapon class to choosen from weaponsTable
+                    if (IsValid(self) && self:GetWeaponAmount(self.CurrentlySelected) != nil &&   self:GetWeaponAmount(self.CurrentlySelected) > 0 ) then
+                        weapon = ents.Create(self.weapons[self.CurrentlySelected]) //set weapon class to choosen from weaponsTable
                         weapon:SetPos(self:LocalToWorld(Vector(0,0,30)))  //set weapon position 30 units up relative to weapon box
                         weapon:SetMoveType(MOVETYPE_NONE) // make weapon also static
                         weapon:SetParent(self)  // parent weapon to weapon box (so it will move with it)
@@ -175,7 +175,7 @@ function ENT:Use(caller,activator)
                         sound.Play( "buttons/combine_button_locked.wav", self:GetPos() )
                         self:SetColor(intialColor)
                     end
-                    self:DecreaseWeaponAmount(weaponbox.CurrentlySelected,activator)
+                    self:DecreaseWeaponAmount(self.CurrentlySelected,activator)
                     
                 end
 
