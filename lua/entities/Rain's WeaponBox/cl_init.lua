@@ -191,5 +191,9 @@ end
 
 
 function ENT:Think()
+    if IsValid(weapon) then
+        print(weapon)
+    end
+ 
 
 end

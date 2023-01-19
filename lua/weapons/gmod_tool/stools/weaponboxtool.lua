@@ -206,6 +206,8 @@ function TOOL:LeftClick( trace )
 		end 
 		weaponbox:SetLimitedSupplyAmount(LSAmount)
 	end
+
+
 	weaponbox:Spawn()
 	timer.Simple(0, function()
 		if IsValid(weaponbox) then

@@ -149,7 +149,8 @@ function ENT:Use(caller,activator)
         self:SetCanUse(false)  //simple bool to limit rate at which player can use weapon box
         timer.Simple(1,function ()
             if IsValid(self)    then
-                if self:GetRandomSupply()  then
+                if self:GetRandomSupply() && !self:GetLimitedSupply() then
+                    print("rat")
                     weapon = ents.Create(self.weapons[math.random(1,#self.weapons)]) //set weapon class to random from weaponsTable
                     weapon:SetPos(self:LocalToWorld(Vector(0,0,30)))  //set weapon position 30 units up relative to weapon box
                     weapon:SetMoveType(MOVETYPE_NONE) // make weapon also static
@@ -159,9 +160,31 @@ function ENT:Use(caller,activator)
                     sound.Play( "buttons/combine_button5.wav", self:GetPos() ) 
                     self:SetColor(intialColor) //set weaponbox color to itself
 
+                elseif (self:GetRandomSupply() && self:GetLimitedSupply()) then
+                    if (IsValid(self) && (self:GetWeaponAmount(1) != nil &&   self:GetWeaponAmount(1) > 0)) then
+                        weapon = ents.Create(self.weapons[math.random(1,#self.weapons)]) //set weapon class to random from weaponsTable
+                        weapon:SetPos(self:LocalToWorld(Vector(0,0,30)))  //set weapon position 30 units up relative to weapon box
+                        weapon:SetMoveType(MOVETYPE_NONE) // make weapon also static
+                        weapon:SetParent(self)  // parent weapon to weapon box (so it will move with it)
+                        weapon:SetAngles(self:LocalToWorldAngles(Angle(0,90,0)) )   // set rotation of weapon to match weaponbox and rotate it by 90 on yaw axis
+                        weapon:Spawn() 
+                        sound.Play( "buttons/combine_button5.wav", self:GetPos() ) 
+                        self:SetColor(intialColor) //set weaponbox color to itself
 
+                    else
+                        sound.Play( "buttons/combine_button_locked.wav", self:GetPos() )
+                        self:SetColor(intialColor)
+                    end
+                    self:DecreaseWeaponAmount(1,activator)
+                    
+                    
+
+                
+                
+
+            
                 else // if selection mode 
-                    if (IsValid(self) && self:GetWeaponAmount(self.CurrentlySelected) != nil &&   self:GetWeaponAmount(self.CurrentlySelected) > 0 ) then
+                    if (IsValid(self) && (self:GetWeaponAmount(self.CurrentlySelected) != nil &&   self:GetWeaponAmount(self.CurrentlySelected) > 0) || !self:GetLimitedSupply()) then
                         weapon = ents.Create(self.weapons[self.CurrentlySelected]) //set weapon class to choosen from weaponsTable
                         weapon:SetPos(self:LocalToWorld(Vector(0,0,30)))  //set weapon position 30 units up relative to weapon box
                         weapon:SetMoveType(MOVETYPE_NONE) // make weapon also static
@@ -200,6 +223,6 @@ end)
 
 function ENT:Think()
 
-   
+
 end
 
