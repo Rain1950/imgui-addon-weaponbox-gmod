@@ -66,6 +66,8 @@ net.Receive("UpdateWeaponAmount", function ()
     ent.weaponNumber = amount
 end)
 
+local boxColor = Color(134,134,134,91)
+local drawColor = Color(255,255,255)
 
 function ENT:Draw()
     self:DrawModel()   
@@ -98,7 +100,7 @@ function ENT:Draw()
            
         elseif (self.weapons != nil) then
         
-            surface.SetDrawColor(255,255,255)
+            surface.SetDrawColor(drawColor)
             surface.SetMaterial(RightArrowMat)    //right arrow
             surface.DrawTexturedRect(263,68,75,75)
             draw.SimpleText("Weapon Box",imgui.xFont("!Arial Rounded MT Bold@60"),-35,-65)
@@ -173,7 +175,7 @@ function ENT:Draw()
         
     end
     if imgui.Entity3D2D(self,Vector(17,-11.7,12) , Angle(0,90,90),0.1) then
-        draw.RoundedBox(15,-70,-60,380,60,Color(134,134,134,91))
+        draw.RoundedBox(15,-70,-60,380,60,boxColor)
         imgui.End3D2D()
     end
   
@@ -190,10 +192,7 @@ function ENT:Initialize()
 end
 
 
-function ENT:Think()
-    if IsValid(weapon) then
-        print(weapon)
-    end
+
  
 
 end

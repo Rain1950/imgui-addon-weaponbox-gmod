@@ -11,7 +11,6 @@ util.AddNetworkString("isHovering")
 util.AddNetworkString("selectedWeaponsTable") 
 util.AddNetworkString("selectedWeaponsTableClient") 
 util.AddNetworkString("RandomSupplyBool")
-util.AddNetworkString("LimitedSupplyAm")
 util.AddNetworkString("LimitedSupplyBool")
 util.AddNetworkString("SetNextSelection")
 util.AddNetworkString("DecreaseWeaponNumber")
@@ -140,17 +139,18 @@ end)
 
 
 local canUse = true
+
+local interactionColor  = Color(218,26,26,10)
  
 function ENT:Use(caller,activator)
     if self:GetCanUse() && IsValid(self) && !isHovering  then
        
      
-        self:SetColor(Color(218,26,26,10))   //interaction color
+        self:SetColor(interactionColor)   //interaction color
         self:SetCanUse(false)  //simple bool to limit rate at which player can use weapon box
         timer.Simple(1,function ()
             if IsValid(self)    then
                 if self:GetRandomSupply() && !self:GetLimitedSupply() then
-                    print("rat")
                     weapon = ents.Create(self.weapons[math.random(1,#self.weapons)]) //set weapon class to random from weaponsTable
                     weapon:SetPos(self:LocalToWorld(Vector(0,0,30)))  //set weapon position 30 units up relative to weapon box
                     weapon:SetMoveType(MOVETYPE_NONE) // make weapon also static
